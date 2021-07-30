@@ -12,10 +12,10 @@
         <div class="form-inputs">
           <label v-show="name != '' " for="name">Nom :</label>
           <input name="name" class="signup-input" id="signup-nom" type="text" placeholder="Nom" v-model="name" />
-          <p v-show="submitted && !name">Le nom est requis pour s'inscrire</p>
+          <p v-show="submitted && !name" class="error">Le nom est requis pour s'inscrire</p>
           <label v-show="firstname != '' " for="firstname">Prenom :</label>
           <input name="name" class="signup-input" id="signup-prenom" type="text" placeholder="Prenom" v-model="firstname" />
-          <p v-show="submitted && !firstname">
+          <p v-show="submitted && !firstname" class="error"> 
             Oups, il semble que vous ayez oublié d'inscrire votre prénom dans le
             champ
           </p>
@@ -24,14 +24,14 @@
         <div class="form-inputs">
           <label v-show="mail != '' " for="signup-email">Email :</label>
           <input class="signup-input" id="signup-email" type="email" placeholder="Email" v-model="mail" />
-          <p v-show="submitted && !mail">
+          <p v-show="submitted && !mail" class="error">
             N'oubliez pas d'insérer une adresse mail
           </p>
           <label v-show="password != '' " for="signup-password">Mot de passe :</label>
           <input class="signup-input" id="signup-password" type="password" placeholder="Mot de passe"
             v-model="password" />
-          <p v-show="submitted && !password">
-            >Aïe, sans mot de passe, impossible de vous inscrire
+          <p v-show="submitted && !password" class="error">
+            Aïe, sans mot de passe, impossible de vous inscrire
           </p>
         </div>
       </div>
@@ -132,6 +132,9 @@
 </script>
 
 <style>
+  .error {
+    color: red;
+  }
   .signup-form {
     margin-top: 3rem;
   }

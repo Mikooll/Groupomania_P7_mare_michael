@@ -1,5 +1,12 @@
 <template>
   <div class="header">
+    <div v-if="loader" class="loader__container">
+      <div class="fulfilling-bouncing-circle-spinner">
+        <div class="circle"></div>
+        <div class="orbit"></div>
+      </div>
+    </div>
+
     <div class="img-container">
       <img src="../images/logos/groupomania.png" alt="Groupomania logo" class="image-logo-home" />
     </div>
@@ -21,10 +28,23 @@
 <script>
   export default {
     name: "Header",
+    data() {
+      return {
+        loader: false
+      }
+    },
     methods: {
       disconnect: function () {
-        localStorage.clear();
-        this.$router.push('/');
+        this.loader = true;
+
+        setTimeout(() => {
+          this.loader = false;
+          localStorage.clear();
+        }, 2000)
+
+        setTimeout(function(){
+          this.$router.push('/')
+        }, 5000)
       }
     },
   };
@@ -71,6 +91,6 @@
     .nav-container {
       width: 100%;
     }
-    
+
   }
 </style>

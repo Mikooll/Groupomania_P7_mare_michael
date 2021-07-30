@@ -9,16 +9,18 @@
     </div>
 
     <h2>Connexion</h2>
+    <p v-if="isWrong" class="isWrong">{{ errors }}</p>
+
     <form @submit.prevent="loginDatas">
       <div class="form-login-container">
         <label v-show="email != '' " for="login-email">Email :</label>
         <input class="login-input" id="login-email" type="text" placeholder="Email" v-model="email" />
-        <p v-show="submitted && !email">
+        <p v-show="submitted && !email" class="error">
           Oups, vous avez oublié d'indiquer votre adresse mail
         </p>
         <label v-show="password != '' " for="login-password">Mot de passe :</label>
         <input class="login-input" id="login-password" type="password" placeholder="Mot de passe" v-model="password" />
-        <p v-show="submitted && !password">Veuillez insérer votre mot de passe</p>
+        <p v-show="submitted && !password" class="error">Veuillez insérer votre mot de passe</p>
       </div>
       <button id="login-btn" class="login-btn">Connexion</button>
     </form>
@@ -36,7 +38,8 @@
         password: "",
         submitted: false,
         errors: "",
-        loader: ""
+        loader: "",
+        isWrong: false
       };
     },
     methods: {
@@ -68,6 +71,8 @@
             }, 2000);
           })
           .catch((error) => {
+            this.loader = false;
+            this.isWrong = true;
             let errorCode = error.message.split("code ")[1];
             switch (errorCode) {
               case "401":
@@ -115,5 +120,10 @@
     padding: .5rem;
     border: none;
     border-radius: 1rem;
+  }
+  .isWrong {
+    color: red;
+    font-size: 1.5rem;
+    font-weight: 600;
   }
 </style>

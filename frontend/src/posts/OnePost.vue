@@ -1,6 +1,12 @@
 <template>
   <Header />
   <div>
+    <div v-if="loader" class="loader__container">
+      <div class="fulfilling-bouncing-circle-spinner">
+        <div class="circle"></div>
+        <div class="orbit"></div>
+      </div>
+    </div>
     <button @click="back()" class="back">Retour</button>
 
     <div class="message-container">
@@ -8,7 +14,7 @@
         <h2>Contenu du message</h2>
         <p>{{ message.content }}</p>
       </div>
-      <div v-if="typeOfImg !== null && !isUrl">
+      <div v-if="typeOfImg !== null && isUrl">
         <h2>Image</h2>
         <img class="message__img" :src="message.img" alt="">
       </div>
@@ -72,6 +78,7 @@ export default {
       indexComm: "",
       typeOfImg: "",
       isUrl: false,
+      loader: false
     };
   },
   methods: {
@@ -91,6 +98,7 @@ export default {
       var commentSelected = this.comments[index];
 
       if (confirm("Voulez-vous vraiment effectuer ces modifications ?")) {
+        this.loader = true;
         var myHeaders = new Headers();
         myHeaders.append(
           "Authorization",
@@ -119,14 +127,23 @@ export default {
           .then((result) => {
             console.log(result);
             this.modif = false;
+            setTimeout(() => {
+              location.reload();
+              this.loader = false;
+              alert("Le commentaire à été modifié");
+          }, 2000)
           })
-          .catch((error) => console.log("error", error));
+          .catch((error) => {
+            this.loader = false;
+            console.log("error", error)
+          });
       }
     },
     deleteComm: function (index) {
       var commentSelected = this.comments[index];
 
       if (confirm("Voulez-vous vraiment supprimé ce commentaire ?")) {
+        this.loader = true;
         var myHeaders = new Headers();
         myHeaders.append(
           "Authorization",
@@ -144,16 +161,24 @@ export default {
         fetch(url, requestOptions)
           .then((response) => response.text())
           .then((result) => {
-            console.log(result)
-            location.reload()
+            console.log(result);
+            setTimeout(() => {
+              location.reload();
+              this.loader = false;
+              alert("Le commentaire à été supprimé")
+          }, 2000)
           })
-          .catch((error) => console.log("error", error));
+          .catch((error) => {
+            console.log("error", error);
+            this.loader = false;
+          });
       }
     },
     addComment: function () {
       this.commActive = !this.commActive;
     },
     sendComment: function () {
+      this.loader = true;
       var myHeaders = new Headers();
       myHeaders.append(
         "Authorization",
@@ -180,9 +205,16 @@ export default {
         .then((response) => response.text())
         .then((result) => {
           console.log(result);
-          location.reload();
+          setTimeout(() => {
+            location.reload();
+            this.loader = false;
+            alert("Le commentaire à été créé")
+        }, 2000)
         })
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          this.loader = false;
+          console.log("error", error)
+        });
     },
     getOnePost: function () {
 

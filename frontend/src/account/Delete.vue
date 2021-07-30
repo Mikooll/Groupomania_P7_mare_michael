@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div v-if="loader" class="loader__container">
+      <div class="fulfilling-bouncing-circle-spinner">
+        <div v-if="deleted" class="circle"></div>
+        <div v-if="deleted" class="orbit"></div>
+      </div>
+    </div>
     <button class="delete-btn" @click.prevent="deleteAccount()">Supprimer mon compte</button>
   </div>
 </template>
@@ -9,19 +15,30 @@
   import router from '../router';
 
   export default {
+    data() {
+      return {
+        loader: false,
+      }
+    },
     methods: {
       deleteAccount: function () {
         if (confirm("Voulez-vous vraiment supprimé définitivement votre compte ?")) {
+          this.loader = true;
           axios.delete("http://localhost:3000/api/users/profile/" + localStorage.getItem('id'), {
               headers: {
                 "Authorization": +localStorage.getItem("token")
               }
             })
             .then(() => {
-              localStorage.clear();
-              router.push('/');
+              setTimeout(() => {
+                this.loader = false
+                alert("Le compte a bien été supprimé")
+                localStorage.clear();
+                router.push('/');
+              }, 2000)
             })
             .catch(error => {
+              this.loader = false;
               console.log(error);
             })
         }

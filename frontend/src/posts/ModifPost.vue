@@ -1,6 +1,13 @@
 <template>
     <Header />
     <div>
+        <div v-if="loader" class="loader__container">
+            <div class="fulfilling-bouncing-circle-spinner">
+                <div class="circle"></div>
+                <div class="orbit"></div>
+            </div>
+        </div>
+        <button @click="back()" class="back">Retour</button>
         <div class="message__modif__container">
             <div class="mess_modif__content">
                 <label for="content" class="content__title">Contenu du message</label>
@@ -16,7 +23,7 @@
         <div class="btn__container">
             <button v-if="(authorized && !modif) || (isAdmin == 'true' && !modif)" @click="modify()">Modifier</button>
             <button v-if="modif" @click="addModif()">Appliquer</button>
-            <button @click="cancel()">Annuler</button>
+            <button v-if="modif" @click="cancel()">Annuler</button>
             <button v-if="modif" @click="deletePost()">Supprimer</button>
         </div>
     </div>
@@ -36,10 +43,14 @@
                 modif: false,
                 isAdmin: false,
                 typeOfImg: "",
-                isUrl: false
+                isUrl: false,
+                loader: false
             }
         },
         methods: {
+            back: function() {
+                this.$router.push("/allPosts")
+            },
             modify: function () {
                 this.modif = true
             },
@@ -47,8 +58,8 @@
                 this.modif = false
             },
             addModif: function () {
-
                 if (confirm("Voulez-vous vraiment effectuer ces modifications ?")) {
+                    this.loader = true;
                     var formData = new FormData()
 
                     var myHeaders = new Headers();
@@ -56,7 +67,7 @@
                         "Bearer " + localStorage.getItem("token")
                         );
                     formData.append("userId", +localStorage.getItem("id"));
-                    formData.append("content", this.content,);
+                    formData.append("content", this.message.content);
             
                     if(this.$refs.myImage.files.length > 0) {
                         formData.append("img", this.$refs.myImage.files[0])
@@ -75,13 +86,21 @@
                         .then(response => response.text())
                         .then(result => {
                             console.log(result)
-                            this.$router.push('/allPosts')
-                            })
-                        .catch(error => console.log('error', error));
+                            setTimeout(() => {
+                                this.loader = false;
+                                this.$router.push('/allPosts');
+                                alert("Le message à été modifié");
+                            }, 2000)
+                        })
+                        .catch(error => {
+                            console.log('error', error);
+                            this.loader = false
+                        });
                 }
             },
             deletePost: function () {
                 if (confirm("Voulez-vous vraiment supprimé ce message ?")) {
+                    this.loader = true;
                     var myHeaders = new Headers();
                     myHeaders.append("Authorization",
                         "Bearer " + localStorage.getItem("token")
@@ -99,9 +118,16 @@
                         .then(response => response.text())
                         .then(result => {
                             console.log(result)
-                            this.$router.push('/allPosts')
+                            setTimeout(() => {
+                                this.loader = false;
+                                this.$router.push('/allPosts');
+                                alert("Le message à été supprimé")
+                            }, 2000)
                         })
-                        .catch(error => console.log('error', error));
+                        .catch(error => {
+                            this.loader = false;
+                            console.log('error', error)
+                        });
                 }
             },
             getOnePost: function () {
@@ -170,6 +196,10 @@
     .btn__container button {
         padding: 1rem;
         margin: 1rem;
+    }
+
+    .back {
+        margin-bottom: 2rem;
     }
 
     @media (min-width: 678px) {

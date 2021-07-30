@@ -1,6 +1,12 @@
 <template>
   <Header />
   <div>
+    <div v-if="loader" class="loader__container">
+      <div class="fulfilling-bouncing-circle-spinner">
+          <div class="circle"></div>
+          <div class="orbit"></div>
+      </div>
+  </div>
     <router-link to="/AllPosts" class="back">Retour</router-link>
     <h2 class="new-post__title">Creation d'un nouveau post</h2>
     <div class="message__container">
@@ -25,10 +31,12 @@
     data() {
       return {
         content: "",
+        loader: false
       };
     },
     methods: {
       publish: function () {
+        this.loader = true;
         var formData =  new FormData()
         
         var myHeaders = new Headers();
@@ -53,9 +61,13 @@
         fetch("http://localhost:3000/api/message/", requestOptions)
           .then(response => response.text())
           .then(() => {
-            this.$router.push("/allPosts")
+            this.loader = false;
+            this.$router.push("/allPosts");
           })
-          .catch(error => console.log(error));
+          .catch(error => {
+            this.loader = false;
+            console.log(error)
+          });
       }, 
     }, 
   }

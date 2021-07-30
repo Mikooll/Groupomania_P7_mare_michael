@@ -22,12 +22,12 @@
     </div>
     <button class="add-comm" @click="addComment()">Ajouter un commentaire</button>
     <div v-show="commActive" class="add-comm__container">
-      <form>
-        <div class="add-comm__content">
-          <p>Contenu</p>
-          <textarea type="text" v-model="commentContent" />
-          </div>
-      </form>
+
+      <div class="add-comm__content">
+        <p>Contenu</p>
+        <textarea type="text" v-model="commentContent" />
+      </div>
+
       <button @click="sendComment()">Envoyer le commentaire</button>
     </div>
     <div class="comments-container">
@@ -293,6 +293,7 @@ export default {
     border-radius: 2rem;
     padding: 2rem;
   }
+
   .message__img {
     max-width: 50%;
   }
@@ -362,10 +363,9 @@ export default {
 
   .comment__content textarea {
     vertical-align: middle;
-    margin: 0 0 1rem 2rem;
     width: 302px;
     height: 94px;
-    max-width: 600px;
+    max-width: 80%;
   }
 
   @media (max-width: 1060px) {
@@ -376,13 +376,13 @@ export default {
 
   @media (max-width: 718px) {
     .comm__container {
-      width: 100%;
+      width: auto;
     }
   }
 
   @media (max-width: 548px) {
     .add-comm__container {
-      width: 100%;
+      width: auto;
     }
 
     .comment__content {
@@ -390,6 +390,12 @@ export default {
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .message-container {
+      width: auto;
     }
   }
 </style>

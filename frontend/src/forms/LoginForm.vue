@@ -126,4 +126,10 @@
     font-size: 1.5rem;
     font-weight: 600;
   }
+
+  @media (max-width: 425px) {
+    .login-input {
+      width: 100%;
+    }
+  }
 </style>

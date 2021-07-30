@@ -217,10 +217,12 @@
         .mess_modif__content {
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
         .mess_modif__content textarea {
             height: 82px;
+            max-width: 80%;
         }
     }
 

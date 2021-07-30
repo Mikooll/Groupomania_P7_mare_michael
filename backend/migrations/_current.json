@@ -1,0 +1,17 @@
+{
+    "tables": {
+        "Comment": {
+            "tableName": "Comment",
+            "indexes": []
+        },
+        "Message": {
+            "tableName": "Message",
+            "indexes": []
+        },
+        "Users": {
+            "tableName": "Users",
+            "indexes": []
+        }
+    },
+    "revision": 1
+}

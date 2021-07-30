@@ -7,16 +7,18 @@ module.exports = (sequelize, DataTypes) => {
 
   Comment.init(
     {
-      user: DataTypes.STRING,
-      message: DataTypes.STRING,
+      userId: DataTypes.STRING,
+      messageId: DataTypes.STRING,
       content: DataTypes.STRING,
-      img: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: "Comment",
     }
   );
+
+  const User = require('./user')(sequelize, DataTypes)
+  Comment.User = Comment.belongsTo(User)
 
   return Comment;
 };

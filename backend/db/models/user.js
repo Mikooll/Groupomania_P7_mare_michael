@@ -6,13 +6,21 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
+      name: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      isAdmin: {
+        type: DataTypes.TINYINT,
+        allowNull: true,
+      },
       firstname: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      lastname: {
+      email: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
       },
       password: {
@@ -26,17 +34,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User", // We need to choose the model name
     }
   );
-
-  const encryptPass = (user) => {
-    if (user.changed("password")) {
-      return bcrypt.hash(user.password, 10).then((hash) => {
-        user.password = hash;
-      });
-    }
-  };
-
-  User.beforeCreate(encryptPass);
-  User.beforeUpdate(encryptPass);
 
   return User;
 };

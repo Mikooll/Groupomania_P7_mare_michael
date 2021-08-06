@@ -62,7 +62,7 @@ exports.modifyMessage = (req, res, next) => {
   console.log(req.file)
   const messObj = req.file
     ? {
-        ...req.body.message,
+        ...req.body,
         img: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }` // si contient une nouvelle image

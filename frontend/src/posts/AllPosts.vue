@@ -48,9 +48,6 @@
             }
         },
         methods: {
-            test: function () {
-                console.log(localStorage)
-            },
             newPost: function () {
                 this.$router.push('/newPost')
             },
